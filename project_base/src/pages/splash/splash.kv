@@ -1,0 +1,18 @@
+<Splash>:
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'center'
+        canvas.before:
+            Color:
+                rgba: app.theme_color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [5,]
+        Label:
+            text: 'Example'
+            font_size: sp(30)
+            font_name: 'kivy_modules\\font\\MuseoSansRounded900.otf'
+        # Image:
+        #     source: app.splash
+        #     size_hint: 1,1
