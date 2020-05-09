@@ -13,7 +13,7 @@ This project is a kivy structure buider with a structure for app desktop or mobi
 
 In terminal:
 
-````
+```
 python main.py
 ```
 
