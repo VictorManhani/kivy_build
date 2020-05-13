@@ -1,6 +1,8 @@
 from kivy.lang import Builder
 from kivy.uix.button import Button
-from kivy.properties import ListProperty, NumericProperty
+from kivy.properties import (
+    ListProperty, NumericProperty, StringProperty
+)
 from kivy.metrics import sp, dp
 
 class FlatButton(Button):
@@ -10,7 +12,7 @@ class ImageButton(Button):
 	pass
 
 class IconButton(Button):
-	pass
+	icon = StringProperty('')
 
 class FlexButton(Button):
 	background_color = [0,0,0,0]
@@ -42,6 +44,7 @@ class FlexButton(Button):
 Builder.load_string('''
 #:import rgb kivy.utils.get_color_from_hex
 #:import hex kivy.utils.get_hex_from_color
+#:import icons kivy_modules.icons.md_icons
 
 <FlexButton>:
 	canvas.before:
@@ -123,10 +126,10 @@ Builder.load_string('''
 
 <IconButton>:
 	label: ''
-	icon: ''
+	icon: 'language-python'
 	font_size: '20sp'
 	markup: True
-	text: '[font=kivy_modules//font//icons.ttf]' + self.icon + '[/font]' + ' [size=' + str(int(self.font_size)) + ']' + self.label + '[/size]'
+	text: '[font=kivy_modules\\\\font\\\\icons.ttf]' + icons[self.icon] + '[/font]' + ' [size=' + str(int(self.font_size)) + ']' + self.label + '[/size]'
 	background_normal: ''
 	background_color: [1,1,1,1]
 	text_size: self.size

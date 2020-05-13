@@ -7,6 +7,8 @@ from kivy.properties import StringProperty, ObjectProperty, BooleanProperty
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 
+import json
+import pprint
 
 class HoverBehavior(object):
 	hovered = BooleanProperty(False)
@@ -18,7 +20,7 @@ class HoverBehavior(object):
 		Window.bind(mouse_pos=self.on_mouse_pos)
 		super(HoverBehavior, self).init(**kwargs)
 
-	def on_mouse_pos(self, _args):
+	def on_mouse_pos(self, args):
 		if not self.get_root_window():
 			return
 		# do proceed if I'm not displayed <=> If have no parent 
@@ -74,8 +76,59 @@ class ScrollableLabel(ScrollView):
 class FlexLabel(Label):
 	font_size = sp(20)
 
+# label with a pretty representation of text
+# inspired by pprint module
+class PrettyLabel(ScrollView):
+    text = StringProperty('')
+    padding = 10
+    
+    def init(self, *args, **kwargs):
+        super(PrettyLabel, self).init(*args, **kwargs)
+        self.text = '%s' % 'hello top day dia africanner ' * 100
+
+    def pprint(self, obj, sort_keys = False, indent = 4):
+        """Pretty-print a Python object to a stream [default is sys.stdout]."""
+        # pprint.pprint(
+        #     obj, indent = indent, width = self.width,
+        #     depth = 1, stream = self,
+        # )
+
+        self.text = json.dumps(
+            obj, sort_keys = sort_keys,
+            indent = indent, separators = (',', ': ')
+		)
+
+    def write(self, text):
+        self.text += text
 
 Builder.load_string('''
+<PrettyLabel>:
+	do_scroll_y: True
+	do_scroll_x: True
+    scroll_type: ['bars']
+    bar_width: dp(10)
+    bar_color: [.2, .2, 1, 1]
+    effect_cls: 'ScrollEffect'
+    Label:
+		# color: [.2,.2, .2, 1]
+        size_hint: None, None
+        width: dp(600)
+        height: self.texture_size[1]
+        text_size_x: self.width
+        padding: 10, 10
+        text: root.text
+        # markup: True
+        # # text_size: self.size
+        # halign: 'left'
+        # valign: 'middle'
+        # padding: 10, 10
+        canvas.before:
+			Color:
+				rgba: [.3,.3,.3,1]
+			Rectangle:
+				pos: self.pos
+				size: self.size
+
 <ScrollableLabel>:
 	Label:
 		size_hint_y: None
