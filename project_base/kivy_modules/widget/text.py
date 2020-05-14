@@ -25,7 +25,7 @@ class AutoComplete(TextInput):
 	def start(self, *args):
 		pass
 
-class FlexText(TextInput):
+class FlatText(TextInput):
 	def __init__(self, **kwargs):
 		self.background_color = [0,0,0,0]
 		self.background_normal = ''
@@ -44,8 +44,19 @@ class FlexText(TextInput):
 		self.background_color = [0,0,0,0]
 		super().__init__(**kwargs)
 		
+class FlexText(TextInput):
+	def __init__(self, **kwargs):
+		super().__init__(**kwargs)
+
+    
 Builder.load_string('''
 <FlexText>:
+	background_normal: ''
+	background_color: [.2,.2,.2,1]
+	foreground_color: [.9,.9,.9,1]
+	hint_text_color: [1,1,1,1]
+
+<FlatText>:
 	canvas.before:
 		Color:
 			rgba: root.bg_color if self.focus else root.border_color 

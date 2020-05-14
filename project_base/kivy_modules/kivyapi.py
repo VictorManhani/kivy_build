@@ -21,7 +21,7 @@ class KivyApi(Singleton_Strict):
             try:
                 return f(*args, **kwargs)
             except Exception as e:
-                KivyApi.error = e
+                KivyApi.instance.error = e
                 return KivyApi.instance
         return func
 
@@ -29,6 +29,10 @@ class KivyApi(Singleton_Strict):
         if not self.error:
             return ''
         return func(self.error)
+
+    def clear_properties(self):
+        self.error = None
+        self.result = None
 
     @catch_exception
     def get(self, **kwargs):
@@ -40,42 +44,44 @@ class KivyApi(Singleton_Strict):
             other objects:
             - cookies, request, raw
         """
+        self.clear_properties()
         url = kwargs.get('url', '')
         headers = kwargs.get('headers', {})
         params = kwargs.get('params', {})
 
         self.result = requests.get(**kwargs)
         # self.result = requests.get('8.8.8.8')
+
         return self.instance
 
     @catch_exception
-    def post(self, url, data = {}):
-        self.result = requests.post(url, data = data)
-        # self.result = requests.get('8.8.8.8')
+    def post(self, **kwargs):
+        self.clear_properties()
+        self.result = requests.post(**kwargs)
         return self.instance
     
     @catch_exception
-    def put(self, url, data = {}):
-        self.result = requests.post(url, data = data)
-        # self.result = requests.get('8.8.8.8')
+    def put(self, **kwargs):
+        self.clear_properties()
+        self.result = requests.put(**kwargs)
         return self.instance
-    
+
     @catch_exception
-    def delete(self, url):
-        self.result = requests.post(url)
-        # self.result = requests.get('8.8.8.8')
+    def delete(self, **kwargs):
+        self.clear_properties()
+        self.result = requests.delete(**kwargs)
         return self.instance
-    
+
     @catch_exception
-    def head(self, url):
-        self.result = requests.head(url)
-        # self.result = requests.get('8.8.8.8')
+    def head(self, **kwargs):
+        self.clear_properties()
+        self.result = requests.head(**kwargs)
         return self.instance
-    
+
     @catch_exception
-    def options(self, url):
-        self.result = requests.options(url)
-        # self.result = requests.get('8.8.8.8')
+    def options(self, **kwargs):
+        self.clear_properties()
+        self.result = requests.options(**kwargs)
         return self.instance
 
     @catch_exception

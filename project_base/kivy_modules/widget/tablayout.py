@@ -26,14 +26,14 @@ class TabItem(BoxLayout):
     background_color = ListProperty([.2, .2, .2, 1])
     
 class TabLayout(BoxLayout):
-    addresses = ListProperty([])
-    multicolor = BooleanProperty(True)
-    default_color = ListProperty([.2, .2, 1, 1])
-    tab_items = {}
-    menu_items = {}
-    content_items = {}
-    button_name = {}
-    layout_colors = {}
+    _addresses = ListProperty([])
+    _multicolor = BooleanProperty(False)
+    _default_color = ListProperty([.2, .2, 1, 1])
+    _tab_items = {}
+    _menu_items = {}
+    _content_items = {}
+    _button_name = {}
+    _layout_colors = {}
 
     def __init__(self, *args, **kwargs):
         super(TabLayout, self).__init__(*args, **kwargs)
@@ -55,54 +55,57 @@ class TabLayout(BoxLayout):
             size_hint = [1, None],
             height = dp(50),
             background_color = [.2, .2, .2, 1],
-            background_normal = ''
+            background_normal = '',
+            halign = "center",
+            valign = "middle"
         )
         but.identifier = identifier
+        but.text_size = but.size
         but.bind(on_release = self.switch)
         return but
 
     # obtém os items declarados na tab
     def tab_item(self, evt):
-        # Copia endereços dos tab_items declarados no kv file.
-        self.addresses = [tab_i for tab_i in self.children if type(tab_i) is TabItem][::-1]
+        # Copia endereços dos _tab_items declarados no kv file.
+        self._addresses = [tab_i for tab_i in self.children if type(tab_i) is TabItem][::-1]
 
-        # preenche button_name com sueus respectivos nomes e objetos
-        for i, a in enumerate(self.addresses):
+        # preenche b_utton_name com sueus respectivos nomes e objetos
+        for i, a in enumerate(self._addresses):
             # Cria os botões personalizados para o menu
             identifier = f'screen{i}'
             # verifica se o tab_item está sem nome e o nomeia
             if a.text == '':
                 a.text = identifier
             # Guarda o nome e o objeto de cada tab_item
-            self.tab_items[identifier] = a
+            self._tab_items[identifier] = a
             # guarda cada button identificado pelo seu identificador em um dict
-            self.menu_items[identifier] = self.button_build(
+            self._menu_items[identifier] = self.button_build(
                 identifier, a.text
             )
 
     # Define as cores dos botões e screebs.
     def colorize(self, evt):
-        for i, a in enumerate(self.addresses):
+        for i, a in enumerate(self._addresses):
             # Cria os botões personalizados para o menu
             identifier = f'screen{i}'
             # adiciona a cor do tab_item ao dict layoutcolors
-            # self.layout_colors[identifier] = a.background_color
+            # self._layout_colors[identifier] = a.background_color
             
-            if self.multicolor:
-                # adiciona cor aleatória ao dict layout_colors
-                self.layout_colors[identifier] = [
+            if self._multicolor:
+                # adiciona cor aleatória ao dict._layout_colors
+                self._layout_colors[identifier] = [
                     random.random(), random.random(), random.random(), 1
                 ]
-            elif not self.multicolor:
-                # adiciona a cor padrão ao dict layout_colors
-                self.layout_colors[identifier] = self.default_color
+            elif not self._multicolor:
+                # adiciona a cor padrão ao dict._layout_colors
+                self._layout_colors[identifier] = self._default_color
 
     # Fazer a gestão dos botões como toggle button e das screens
     def switch(self, but):
         if but.background_color == [.2,.2,.2,1]:
             for b in self.container.children:
                 b.background_color = [.2,.2,.2,1]
-            but.background_color = self.layout_colors[but.identifier]
+            but.background_color = self._layout_colors[but.identifier]
             self.manager.current = but.identifier
 
     # criar conteúdo para a content screen
@@ -125,32 +128,32 @@ Screen:
 
     # preenche o menu e a content screen com items de estrutura.
     def item_build(self, evt):
-        for identifier, text in enumerate(self.tab_items):
+        for identifier, text in enumerate(self._tab_items):
             # rename the identifier
             identifier = f"screen{identifier}"
 
             # Adicionar o botão no container
-            self.container.add_widget(self.menu_items[identifier])
+            self.container.add_widget(self._menu_items[identifier])
 
             # cria as screens personalizadas para a content screen
-            self.content_items[identifier] = self.screen_build(
-                identifier, text, self.layout_colors[identifier]
+            self._content_items[identifier] = self.screen_build(
+                identifier, text, self._layout_colors[identifier]
             )
             
             # adicionar cor ao tab_item
-            self.tab_items[identifier].background_color = self.layout_colors[identifier]
+            self._tab_items[identifier].background_color = self._layout_colors[identifier]
             
             # adicionar a screen criada na screen content
-            self.manager.add_widget(self.content_items[identifier])
+            self.manager.add_widget(self._content_items[identifier])
 
         # Colore o primeiro botão
-        self.menu_items['screen0'].background_color = self.layout_colors['screen0']
+        self._menu_items['screen0'].background_color = self._layout_colors['screen0']
 
     # Preenche cada screen da content screen com os tab_item,
     def tab_manager(self, obj):
-        for k, v in self.tab_items.items():
+        for k, v in self._tab_items.items():
             self.remove_widget(v)
-            self.content_items[k].add_widget(v)
+            self._content_items[k].add_widget(v)
 
 Builder.load_string("""
 #:import NoTransition kivy.uix.screenmanager.NoTransition
