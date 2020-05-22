@@ -6,7 +6,7 @@
 			FlexButton:
 				text: "text1"
 				on_release:
-					print(self.text)
+					self.text = 'text1' if self.text == 'text2' else 'text2'
 		FlexLayout:
 			orientation: "horizontal"
 			FlexButton:

@@ -76,23 +76,32 @@ with open('./src/pages/{file_name}/{file_name}.kv', 'r', encoding = 'utf-8') as 
                 f.write(f"""\
 <{class_name}>:
 	FlexLayout:
-		FlexLabel:
-            text: "Hello {screen_name}!"
+		FlexLayout:
+			orientation: "horizontal"
+            FlexLabel:
+                text: "Hello {screen_name}!"
+		FlexLayout:
+			orientation: "horizontal"
+			FlexButton:
+				text: "<- button"
+				on_release:
+					app.root.current = "examplebutton"
+			FlexButton:
+				text: "text ->"
+				on_release:
+					app.root.current = "exampletext"
 """)
 
     def create_project(self):        
         absolute_path = os.path.dirname(os.path.realpath(__file__))
         
         project_base = os.path.join(absolute_path, 'project_base')
-        print(project_base)
         
         project_name = self.project_name.text
         project_name = project_name.replace(' ', '_')
         project_name = os.path.join(absolute_path, project_name)
         if not os.path.exists(project_name):
-            os.mkdir(project_name)
-        print(project_name)
-        
+            os.mkdir(project_name)        
         
         # copy all files and paths from project_base to project_name
         def recursive_copy(src, dest):

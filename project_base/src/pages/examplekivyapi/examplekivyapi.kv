@@ -1,27 +1,25 @@
 
 <ExampleKivyapi>:
-	BoxLayout:
-		orientation: 'vertical'
-		FlexLabel:
-			id: texting
-			text: "Example Label"
-			color: [1,1,1,1]
-			bg_color: [.5, .5, .5, 1]
-		FlexText:
-			id: url
-			hint_text: "url"
-			text: "https://api.github.com/users/VictorManhani"
-		FlexButton:
-			text: "Click to call the API"
-			on_release:
-				root.call_api()
+	FlexLayout:
+		FlexLayout:
+			FlexLabel:
+				id: texting
+				text: "Example Label"
+			FlexText:
+				id: url
+				hint_text: "url"
+				text: "https://api.github.com/users/VictorManhani"
+			FlexButton:
+				text: "Click to call the API"
+				on_release:
+					root.call_api(url.text)
 		FlexLayout:
 			orientation: "horizontal"
 			FlexButton:
-				text: "<- text"
+				text: "<- exampletext"
+				on_release:
+					app.root.current = "exampletext"
+			FlexButton:
+				text: "splash ->"
 				on_release:
 					app.root.current = "splash"
-			FlexButton:
-				text: "async ->"
-				on_release:
-					app.root.current = "label"

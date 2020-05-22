@@ -141,8 +141,8 @@ Builder.load_string('''
 	background_color: [0,0,0,0]
 	background_normal: ''
 	background_down: ''
-	color: [0.0, 0.4471, 0.8235, 1]
-	bg_color: [1,1,1,1]
+	color: [.3, .3, .3, 1]
+	bg_color: [1, 1, 1, 1]
 	text_size: self.size
 	halign: 'center'
 	valign: 'middle'

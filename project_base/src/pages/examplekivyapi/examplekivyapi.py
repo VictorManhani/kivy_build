@@ -17,5 +17,5 @@ class ExampleKivyapi(Screen):
             lambda error: print(error)
         )
 
-with open('./src/pages/examplebutton/examplebutton.kv', 'r', encoding = 'utf-8') as screen:
+with open('./src/pages/examplekivyapi/examplekivyapi.kv', 'r', encoding = 'utf-8') as screen:
     Builder.load_string(screen.read())

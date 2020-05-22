@@ -38,16 +38,15 @@ class FlexButton(RectangularRippleBehavior, Button):
 	def __init__(self, **kwargs):
 		self.halign = 'center'
 		self.valign = 'middle'
-		self.text_size = self.size
 		super(FlexButton, self).__init__(**kwargs)
 		self.button_type_define(self.button_type)
-		self.ripple_color = [0.0, 0.4471, .1, 1]
+		# self.text_size = self.size
+		self.ripple_color = [0.0, 0.6784, 0.9569, 1]
 
 	def button_type_define(self, button_type):
 		if button_type == 'rectangle':
 			Builder.load_string("""
 <FlexButton>:
-    ripple_color: [0, 0, 0, .2]
     color: root.font_color # root.primary_color
 
     canvas.before:
@@ -74,7 +73,8 @@ Builder.load_string('''
 #:import icons kivy_modules.icons.md_icons
 
 <FlexButton>:
-	ripple_color: [0, 0, 0, .2]
+	ripple_color: root.ripple_color
+	# ripple_color: [0, 0, 0, .2]
 	color: root.font_color
 	canvas.before:
 		Color:

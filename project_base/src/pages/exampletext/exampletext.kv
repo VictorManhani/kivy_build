@@ -1,0 +1,16 @@
+<ExampleText>:
+	FlexLayout:
+		FlexLayout:
+			orientation: "horizontal"
+			FlexText:
+				hint_text: "Hello Example Text!"
+		FlexLayout:
+			orientation: "horizontal"
+			FlexButton:
+				text: "<- label"
+				on_release:
+					app.root.current = "examplelabel"
+			FlexButton:
+				text: "kivyapi ->"
+				on_release:
+					app.root.current = "examplekivyapi"

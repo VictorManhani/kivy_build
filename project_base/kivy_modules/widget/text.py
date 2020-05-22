@@ -21,7 +21,7 @@ class AutoComplete(TextInput):
 	def __init__(self, *args, **kwargs):
 		super().__init__(**kwargs)
 		Clock.schedule_once(self.start)
-		
+
 	def start(self, *args):
 		pass
 
@@ -45,16 +45,24 @@ class FlatText(TextInput):
 		super().__init__(**kwargs)
 		
 class FlexText(TextInput):
+	background_normal = ''
+	primary_color = [0.12, 0.58, 0.95, 1]
+	font_color = [.3,.3,.3,1]
+	border_width = 1
+ 
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 
     
 Builder.load_string('''
 <FlexText>:
-	background_normal: ''
-	background_color: [.2,.2,.2,1]
-	foreground_color: [.9,.9,.9,1]
-	hint_text_color: [1,1,1,1]
+    color: root.font_color
+    canvas.before:
+        Color:
+            rgba: root.primary_color
+        Line:
+            width: root.border_width
+            rectangle: (self.x, self.y, self.width, self.height)
 
 <FlatText>:
 	canvas.before:
