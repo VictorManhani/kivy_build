@@ -1,9 +1,10 @@
 from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.properties import (
-    ListProperty, NumericProperty, StringProperty
+    ListProperty, NumericProperty, StringProperty, OptionProperty
 )
 from kivy.metrics import sp, dp
+from kivy.uix.behaviors import TouchRippleBehavior
 
 class FlatButton(Button):
 	pass
@@ -14,7 +15,7 @@ class ImageButton(Button):
 class IconButton(Button):
 	icon = StringProperty('')
 
-class FlexButton(Button):
+class FlexButton(TouchRippleBehavior, Button):
 	background_color = [0,0,0,0]
 	background_normal = ''
 	background_down = ''
@@ -24,29 +25,38 @@ class FlexButton(Button):
 	bg_color = ListProperty([1,1,1,1])
 	border_color = ListProperty([0.0, 0.4471, 0.8235, 1])
 	border_weigth = NumericProperty(dp(1))
-	
+ 
+	button_type = OptionProperty("rounded", options = ['rectangle', 'rounded'])
+	primary_color = [0.12, 0.58, 0.95, 1]
+	font_color = [.3,.3,.3,1]
+	border_width = 2
+ 
 	def __init__(self, **kwargs):
-		super().__init__(**kwargs)
 		self.halign = 'center'
 		self.valign = 'middle'
 		self.text_size = self.size
+		super(FlexButton, self).__init__(**kwargs)
+		self.button_type_define(self.button_type)
 
-	def on_press(self, *args):
-		# ~ self.color = [0.0196, 0.4235, 0.7608, 1]
-		# ~ self.border_color = [0.0196, 0.4235, 0.7608, 1]
-		self.color = [0,0,.8, 1]
-		self.border_color = [0,0,.8, 1]
-
-	def on_release(self, *args):
-		self.color = [0.0, 0.4471, 0.8235, 1]
-		self.border_color = [0.0, 0.4471, 0.8235, 1]
-
-Builder.load_string('''
-#:import rgb kivy.utils.get_color_from_hex
-#:import hex kivy.utils.get_hex_from_color
-#:import icons kivy_modules.icons.md_icons
-
+	def button_type_define(self, button_type):
+		if button_type == 'rectangle':
+			Builder.load_string("""
 <FlexButton>:
+    ripple_color: [0, 0, 0, .2]
+    color: root.font_color # root.primary_color
+
+    canvas.before:
+        Color:
+            rgba: root.primary_color
+        Line:
+            width: root.border_width
+            rectangle: (self.x, self.y, self.width, self.height)
+""", filename="rectangle_button.kv")
+		elif button_type == 'rounded':
+			Builder.load_string("""
+<FlexButton>:
+	ripple_color: [0, 0, 0, .2]
+	color: root.font_color
 	canvas.before:
 		Color:
 			rgba: root.border_color
@@ -60,6 +70,36 @@ Builder.load_string('''
 			pos: [(root.pos[0] + (root.border_weigth / 2)), (root.pos[1] + (root.border_weigth / 2))]
 			size: [(root.size[0] - root.border_weigth), (root.size[1] - root.border_weigth)]
 			radius: root.radius
+""", filename="rounded_button.kv")
+
+	# def on_press(self, *args):
+	# 	# ~ self.color = [0.0196, 0.4235, 0.7608, 1]
+	# 	# ~ self.border_color = [0.0196, 0.4235, 0.7608, 1]
+	# 	self.color = [0,0,.8, 1]
+	# 	self.border_color = [0,0,.8, 1]
+
+	# def on_release(self, *args):
+	# 	self.color = [0.0, 0.4471, 0.8235, 1]
+	# 	self.border_color = [0.0, 0.4471, 0.8235, 1]
+
+	def on_touch_down(self, touch):
+		if self.collide_point(touch.x, touch.y):
+			touch.grab(self)
+			self.ripple_show(touch)
+			return super(FlexButton, self).on_touch_down(touch)
+		return False
+
+	def on_touch_up(self, touch):
+		if touch.grab_current is self:
+			touch.ungrab(self)
+			self.ripple_fade()
+			return super(FlexButton, self).on_touch_up(touch)
+		return False
+
+Builder.load_string('''
+#:import rgb kivy.utils.get_color_from_hex
+#:import hex kivy.utils.get_hex_from_color
+#:import icons kivy_modules.icons.md_icons
 
 <FlatButton>:
 	color: [1,1,1,1]

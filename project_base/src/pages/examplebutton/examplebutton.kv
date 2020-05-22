@@ -1,0 +1,20 @@
+
+<ExampleButton>:
+	FlexLayout:
+		FlexButton:
+			id: but1
+			text: "text1"
+			on_release:
+				root.change_text(self)
+		FlexLayout:
+			orientation: "horizontal"
+			FlexButton:
+				text: "<- splash"
+				on_release:
+					Window.set_title("splash")
+					app.root.current = "splash"
+			FlexButton:
+				text: "label ->"
+				on_release:
+					Window.set_title("label")
+					app.root.current = "label"

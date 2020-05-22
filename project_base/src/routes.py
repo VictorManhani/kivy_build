@@ -23,16 +23,18 @@ from kivy_modules.kivyapi import kivyapi
 
 # import the pages here
 from .pages.splash.splash import Splash
-from .pages.example.example import Example
+from .pages.examplebutton.examplebutton import ExampleButton
 
 def Routes():
     return Builder.load_string('''
+#:import Window kivy.core.window.Window
+
 <ManagerRoot@ScreenManager>:
     id: managerroot
 
 ManagerRoot:
     Splash:
         name: 'splash'
-    Example:
-        name: 'example'
+    ExampleButton:
+        name: 'examplebutton'
 ''')

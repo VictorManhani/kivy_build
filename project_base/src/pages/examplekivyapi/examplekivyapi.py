@@ -5,19 +5,17 @@ from kivy.clock import Clock
 
 from kivy_modules.kivyapi import kivyapi
 
-class Example(Screen):
+class ExampleKivyapi(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Clock.schedule_once(self.start, 4)
-        
-    def start(self, evt):
+
+    def call_api(self, url):
         def callback(response):
-            self.ids.texto.text = response.json()['login']
+            self.ids.texting.text = response.json()['login']
         
-        url_get = "https://api.github.com/users/VictorManhani"
-        kivyapi.get(url = url_get).after(callback).catch(
+        kivyapi.get(url = url).after(callback).catch(
             lambda error: print(error)
         )
 
-with open('./src/pages/example/example.kv', 'r', encoding = 'utf-8') as screen:
+with open('./src/pages/examplebutton/examplebutton.kv', 'r', encoding = 'utf-8') as screen:
     Builder.load_string(screen.read())
