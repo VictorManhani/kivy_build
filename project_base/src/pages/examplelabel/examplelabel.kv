@@ -2,3 +2,13 @@
 	FlexLayout:
 		FlexLabel:
             text: "Hello Example Label!"
+		FlexLayout:
+			orientation: "horizontal"
+			FlexButton:
+				text: "<- button"
+				on_release:
+					app.root.current = "examplebutton"
+			FlexButton:
+				text: "text ->"
+				on_release:
+					app.root.current = "exampletext"

@@ -24,6 +24,7 @@ from kivy_modules.kivyapi import kivyapi
 # import the pages here
 from .pages.splash.splash import Splash
 from .pages.examplebutton.examplebutton import ExampleButton
+from .pages.examplelabel.examplelabel import ExampleLabel
 
 def Routes():
     return Builder.load_string('''
@@ -37,4 +38,6 @@ ManagerRoot:
         name: 'splash'
     ExampleButton:
         name: 'examplebutton'
+    ExampleLabel:
+        name: 'examplelabel'
 ''')
