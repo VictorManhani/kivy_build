@@ -11,7 +11,13 @@ This project is a kivy structure buider with a structure for app desktop or mobi
 
 ## howto
 
-In terminal:
+Install python 3.7.7
+
+
+Install kivy 1.11.1
+
+
+In terminal run:
 
 ```
 python main.py
